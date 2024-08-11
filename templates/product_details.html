@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product['product'] }} - VR Shopping Mall</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .product-detail {
+            background: #fff;
+            padding: 2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        .product-detail img {
+            max-width: 100%;
+            height: auto;
+        }
+        .recommendations {
+            margin-top: 2rem;
+        }
+        .recommendations h3 {
+            margin-bottom: 1rem;
+        }
+        .recommendation-card {
+            transition: transform 0.3s;
+            background: #fff;
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        .recommendation-card:hover {
+            transform: scale(1.05);
+        }
+        .recommendation-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">VR Shopping Mall</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}">Products</a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('user_info') }}">User Info</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="product-detail">
+            <h2>{{ product['product'] }}</h2>
+            <p><strong>Category:</strong> {{ product['subcategory'] }}</p>
+            <p><strong>Brand:</strong> {{ product['brand'] }}</p>
+            <p><strong>Rating:</strong> {{ product['rating'] }}</p>
+            <p><strong>Description:</strong> {{ product['description'] }}</p>
+            <p><strong>Sales Price:</strong> ${{ product['sales_price'] }}</p>
+            <p><strong>Market Price:</strong> ${{ product['market_price'] }}</p>
+            <p><strong>Type:</strong> {{ product['type'] }}</p>
+
+            <!-- Add an image if available -->
+            {% if product['image'] %}
+                <img src="{{ product['image'] }}" alt="{{ product['product'] }}">
+            {% endif %}
+        </div>
+
+        <!-- Recommendations Section -->
+        <div class="recommendations">
+            <h3>Recommendations</h3>
+            <div class="row">
+                {% for recommended_product in recommendations %}
+                <div class="col-md-4 mb-4">
+                    <div class="card recommendation-card">
+                        {% if recommended_product['image'] %}
+                            <img src="{{ recommended_product['image'] }}" class="card-img-top" alt="{{ recommended_product['product'] }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ recommended_product['product'] }}</h5>
+                            <p class="card-text"><strong>Category:</strong> {{ recommended_product['subcategory'] }}</p>
+                            <p class="card-text"><strong>Brand:</strong> {{ recommended_product['brand'] }}</p>
+                            <p class="card-text"><strong>Rating:</strong> {{ recommended_product['rating'] }}</p>
+                            <a href="{{ url_for('product_detail', product_id=recommended_product['index']) }}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2024 VR Shopping Mall. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

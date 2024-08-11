@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Recommendations</title>
+</head>
+<body>
+    <h1>Recommended Products</h1>
+    <ul>
+        {% for item in items %}
+            <li>{{ item.product }} (Category: {{ item.Category }}, Subcategory: {{ item.subcategory }}, Brand: {{ item.brand }})</li>
+        {% endfor %}
+    </ul>
+    <a href="/">Back to Home</a>
+</body>
+</html>
+
+
+
+
+
+
+

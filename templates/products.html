@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - VR Shopping Mall</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .header-section {
+            padding: 2rem;
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+        }
+        .header-section h1 {
+            margin-bottom: 1rem;
+        }
+        .product-item {
+            transition: transform 0.3s;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding: 1rem;
+        }
+        .product-item img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s;
+        }
+        .product-item:hover img {
+            transform: scale(1.05);
+        }
+        .product-item h3 {
+            margin: 0.5rem 0;
+        }
+        .product-item p {
+            color: #ff6347;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .product-item a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .product-item a:hover {
+            text-decoration: underline;
+        }
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="{{ url_for('index') }}">VR Shopping Mall</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}">Products</a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('user_info') }}">User Info</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <header class="header-section">
+        <h1>Products</h1>
+        {% if category_name %}
+            <h2>Products in {{ category_name }}</h2>
+        {% else %}
+            <h2>All Products</h2>
+        {% endif %}
+    </header>
+
+    <main class="container my-5">
+        <!-- Search Form -->
+        <form action="{{ url_for('search') }}" method="GET" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="query" class="form-control" placeholder="Search products...">
+                <select name="category" class="form-control">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="product-grid">
+            {% for product in products %}
+                <div class="col-md-4 mb-4">
+                    <div class="product-item">
+                        <img src="{{ product['Image'] }}" alt="{{ product['Product Name'] }}">
+                        <h3>{{ product['Product Name'] }}</h3>
+                        <p>${{ product['Price'] }}</p>
+                        <p><strong>Brand:</strong> {{ product['brand'] }}</p>
+                        <p><strong>Category:</strong> {{ product['category'] }}</p>
+                        <p><strong>Subcategory:</strong> {{ product['subcategory'] }}</p>
+                        <a href="{{ url_for('product_detail', product_id=product['index']) }}">View Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2024 VR Shopping Mall. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

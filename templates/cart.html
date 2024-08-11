@@ -1,0 +1,38 @@
+<div class="container my-5">
+    <h2>Your Cart</h2>
+    <ul class="list-group mb-4">
+        {% for item in cart_items %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ item['product'] }} - ${{ item['sales_price'] }}
+            <button class="btn btn-danger btn-sm" onclick="removeFromCart('{{ item['index'] }}')">Remove</button>
+        </li>
+        {% endfor %}
+    </ul>
+    <h4>Total: ${{ total_price }}</h4>
+
+    <form method="POST" action="{{ url_for('generate_invoice') }}">
+        <div class="form-group">
+            <label for="phone">Enter your phone number to receive the invoice:</label>
+            <input type="text" name="phone" id="phone" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Generate Invoice</button>
+    </form>
+</div>
+
+<script>
+    function removeFromCart(productId) {
+        fetch(`/remove_from_cart/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token() }}'
+            }
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert("Failed to remove product from cart.");
+            }
+        });
+    }
+</script>

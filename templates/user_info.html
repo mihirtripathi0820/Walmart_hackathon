@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Info</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .navbar {
+            background-color: #343a40;
+        }
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+        .card-header {
+            background-color: #343a40;
+            color: #fff;
+        }
+        .btn-action {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .btn-action:hover {
+            background-color: #0056b3;
+        }
+        .section-title {
+            margin-top: 30px;
+        }
+        .avatar-img {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">ShopEase</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">User Info</div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ user.user_id }}</h5>
+                        <p class="card-text">Points: {{ user.points }}</p>
+                        <p class="card-text">Tier: {{ user.tier }}</p>
+                        <p class="card-text">Avatar:</p>
+                        <img src="{{ user.avatar }}" alt="User Avatar" class="avatar-img">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Actions</div>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="form-group">
+                                <label for="amount">Record Transaction:</label>
+                                <input type="number" class="form-control" id="amount" name="amount">
+                                <button type="submit" name="action" value="record_transaction" class="btn btn-action mt-2">Submit</button>
+                            </div>
+                        </form>
+                        <form method="post">
+                            <button type="submit" name="action" value="spin_wheel" class="btn btn-action mt-2">Spin Wheel</button>
+                        </form>
+                        <form method="post">
+                            <button type="submit" name="action" value="play_game" class="btn btn-action mt-2">Play Game</button>
+                        </form>
+                        <form method="post" class="mt-2">
+                            <label for="avatar">Customize Avatar:</label>
+                            <input type="text" class="form-control" id="avatar" name="avatar" placeholder="Enter avatar URL">
+                            <button type="submit" name="action" value="customize_avatar" class="btn btn-action mt-2">Update Avatar</button>
+                        </form>
+                        <p class="mt-3">To create and choose your own avatar, visit <a href="https://vinicius73.github.io/gravatar-url-generator/#/" target="_blank" class="btn btn-action">Gravatar URL Generator</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenges Section -->
+        <div class="section-title"><h2>Challenges</h2></div>
+        <div class="row">
+            {% for challenge, details in challenges.items() %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">{{ challenge }}</div>
+                    <div class="card-body">
+                        <p class="card-text">Completed: {{ details.completed }}</p>
+                        <p class="card-text">Reward: {{ details.reward }} points</p>
+                        {% if not details.completed %}
+                        <form method="post">
+                            <button type="submit" name="challenge" value="{{ challenge }}" class="btn btn-action" name="action" value="complete_challenge">Complete Challenge</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Quests Section -->
+        <div class="section-title"><h2>Quests</h2></div>
+        <div class="row">
+            {% for quest, details in quests.items() %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">{{ quest }}</div>
+                    <div class="card-body">
+                        <p class="card-text">Completed: {{ details.completed }}</p>
+                        <p class="card-text">Reward: {{ details.reward }} points</p>
+                        {% if not details.completed %}
+                        <form method="post">
+                            <button type="submit" name="quest" value="{{ quest }}" class="btn btn-action" name="action" value="complete_quest">Complete Quest</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Missions Section -->
+        <div class="section-title"><h2>Missions</h2></div>
+        <div class="row">
+            {% for mission, details in missions.items() %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">{{ mission }}</div>
+                    <div class="card-body">
+                        <p class="card-text">Completed: {{ details.completed }}</p>
+                        <p class="card-text">Reward: {{ details.reward }} points</p>
+                        {% if not details.completed %}
+                        <form method="post">
+                            <button type="submit" name="mission" value="{{ mission }}" class="btn btn-action" name="action" value="complete_mission">Complete Mission</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Recommendations Section -->
+        <div class="section-title"><h2>Recommended Products</h2></div>
+        <div class="row">
+            {% for product in recommendations %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p class="card-text">{{ product.name }}</p>
+                        <p class="card-text">{{ product.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

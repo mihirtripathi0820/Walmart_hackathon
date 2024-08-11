@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Product</title>
+</head>
+<body>
+    <h1>Select a Product</h1>
+    
+    <form method="post">
+        <label for="product">Product:</label>
+        <select id="product" name="product_id">
+            {% for product in products.itertuples() %}
+                <option value="{{ product.index }}">{{ product.product }}</option>
+            {% endfor %}
+        </select>
+        
+        <button type="submit">Add to Cart</button>
+    </form>
+    
+    <a href="{{ url_for('recommendations', user_id=user_id) }}">Back to Recommendations</a>
+    <a href="{{ url_for('cart') }}">View Cart</a>
+</body>
+</html>
+

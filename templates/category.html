@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category - {{ category_name }} - ShopEase</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .product-card {
+            margin-bottom: 20px;
+        }
+        .product-card img {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include your navbar here -->
+    
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Products in {{ category_name }}</h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3">
+                <div class="card product-card">
+                    <img src="{{ product['Image'] }}" alt="{{ product['Product Name'] }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product['Product Name'] }}</h5>
+                        <p class="card-text">${{ product['Price'] }}</p>
+                        <a href="#" class="btn btn-primary">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Include your footer here -->
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

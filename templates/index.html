@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - VR Shopping Mall</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, rgba(0, 170, 255, 0.7), rgba(255, 255, 255, 0.7)), 
+                        url('https://www.transparenttextures.com/patterns/45-degree-fabric-light.png'); /* Gradient and pattern background */
+            background-attachment: fixed; /* Parallax effect */
+            background-size: cover; /* Ensure pattern covers entire background */
+            color: #000000; /* Dark text for contrast */
+        }
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.8); /* Transparent black background */
+        }
+        .navbar-brand, .nav-link {
+            color: #ffffff !important;
+        }
+        .hero-section {
+            background: url('https://images.unsplash.com/photo-1524749293815-459f90b8cc1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzNzUyOXwwfDF8c2VhcmNofDh8fHNob3B8ZW58MHx8fDE2Nzk2ODMyNTk&ixlib=rb-1.2.1&q=80&w=1080') no-repeat center center;
+            background-size: cover;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background-attachment: fixed;
+            border-bottom: 4px solid #00aaff; /* Blue border at the bottom */
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Darker overlay for text visibility */
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-section h1 {
+            font-size: 4rem;
+            animation: fadeInDown 2s;
+            color: #f8f9fa;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Shadow for better contrast */
+        }
+        .hero-section p {
+            font-size: 1.5rem;
+            animation: fadeInUp 2s;
+            color: #f8f9fa;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); /* Shadow for better contrast */
+        }
+        .category-card, .product-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(0, 0, 255, 0.2); /* Light blue border */
+            background: #ffffff; /* White background for cards */
+            color: #333; /* Dark text color for readability */
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 255, 0.1); /* Subtle blue shadow */
+        }
+        .category-card img, .product-card img {
+            transition: transform 0.3s;
+            border-radius: 5px 5px 0 0;
+        }
+        .category-card:hover img, .product-card:hover img {
+            transform: scale(1.05);
+        }
+        .category-card:hover, .product-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3); /* Blue shadow */
+        }
+        .interactive-button {
+            background: #007bff; /* Primary blue color */
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: background 0.3s;
+        }
+        .interactive-button:hover {
+            background: #0056b3; /* Darker blue */
+        }
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 20px;
+            border-top: 5px solid #00aaff; /* Blue border at the top */
+        }
+        footer a {
+            color: #28a745; /* Match the button color */
+            margin: 0 5px;
+        }
+        footer a:hover {
+            color: #ffffff;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">VR Shopping Mall</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_products') }}">Products</a></li>
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('user_info') }}">User Info</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="animate__animated animate__fadeInDown">Welcome to VR Shopping Mall</h1>
+            <p class="animate__animated animate__fadeInUp">Your one-stop shop for all your needs</p>
+            <a href="{{ url_for('show_products') }}" class="interactive-button animate__animated animate__pulse animate__infinite">Shop Now</a>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row">
+            {% for product in featured_products %}
+            <div class="col-md-4">
+                <div class="card product-card">
+                    <img src="{{ product['Image'] }}" class="card-img-top" alt="{{ product['product'] }}">
+                    <div class="card-body">
+                       <a href="{{ url_for('product_detail', product_id=product['index']) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Shop by Category</h2>
+        <div class="row">
+            {% for category in categories %}
+            <div class="col-md-4">
+                <div class="card category-card">
+                    <img src="https://www.transparenttextures.com/patterns/wood.png" class="card-img-top" alt="{{ category }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ category }}</h5>
+                        <p class="card-text">Explore our range of {{ category }}</p>
+                        <a href="{{ url_for('show_category', category_name=category) }}" class="btn btn-primary">Shop Now</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container my-5 text-center">
+        <button class="interactive-button animate__animated animate__pulse animate__infinite">Special Offer</button>
+    </div>
+
+    <footer class="text-center py-4">
+        <p>&copy; 2024 VR Shopping Mall. All Rights Reserved.</p>
+        <p>Follow us on 
+            <a href="#" class="text-primary"><i class="fab fa-facebook-f"></i></a> 
+            <a href="#" class="text-info"><i class="fab fa-twitter"></i></a> 
+            <a href="#" class="text-danger"><i class="fab fa-instagram"></i></a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.botpress.cloud/webchat/v2/inject.js"></script>
+    <script src="https://mediafiles.botpress.cloud/66627866-260e-4467-9909-2a59e101d013/webchat/v2/config.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
